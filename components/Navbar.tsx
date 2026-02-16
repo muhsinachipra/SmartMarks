@@ -44,6 +44,7 @@ export default function Navbar({ user }: { user?: User }) {
                 className="h-10 w-10 rounded-full object-cover border-2 border-slate-200 dark:border-slate-700"
                 src={
                   user?.user_metadata?.avatar_url ||
+                  user?.identities?.[0]?.identity_data?.avatar_url ||
                   "https://lh3.googleusercontent.com/aida-public/AB6AXuCXdnXO3xVxLhGIJeRDMIMPits0SPwxfmRR_a1jARpMF9DHbcdfX8ZNq0S7VIaCMCZCyrOzZ5gEdglpI99aYLGZj1H2R9o8qV3JdmpFKj3mIiTbhiDV07JTFGWx8qoCZXRkKn_mFFcL0K0JQgPa_nPxS3Kz_gOW4SoW15g0-sN3hFMsw-WFbB5idsklnB7QISb-W9QXCW7SCAt9W00KFKqsY9RnUWIYEAvowx8lZAVbdSxUBva1HdrcCsc43QcvMZdv6pck5VGKOl2o"
                 }
               />

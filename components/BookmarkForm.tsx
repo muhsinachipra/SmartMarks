@@ -4,10 +4,13 @@ import React, { useState } from "react";
 
 import { createClient } from "@/utils/supabase/client";
 
+import { useRouter } from "next/navigation";
+
 export default function BookmarkForm() {
   const [url, setUrl] = useState("");
   const [title, setTitle] = useState("");
   const supabase = createClient();
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,6 +34,7 @@ export default function BookmarkForm() {
     } else {
       setUrl("");
       setTitle("");
+      router.refresh();
     }
   };
 
