@@ -21,8 +21,11 @@ export default function BookmarkList({ initialBookmarks }: { initialBookmarks: B
     }, [initialBookmarks]);
 
     useEffect(() => {
+        // 1. Log to console to confirm we are starting
+        console.log("Setting up realtime subscription...");
+
         const channel = supabase
-            .channel("realtime bookmarks")
+            .channel("realtime_bookmarks_list") // 2. Use a unique name for clarity
             .on(
                 "postgres_changes",
                 {
@@ -31,6 +34,7 @@ export default function BookmarkList({ initialBookmarks }: { initialBookmarks: B
                     table: "bookmarks",
                 },
                 (payload) => {
+                    console.log("Change received!", payload); // 3. Log the payload
                     if (payload.eventType === "INSERT") {
                         setBookmarks((prev) => [payload.new as Bookmark, ...prev]);
                     } else if (payload.eventType === "DELETE") {
@@ -38,7 +42,14 @@ export default function BookmarkList({ initialBookmarks }: { initialBookmarks: B
                     }
                 },
             )
-            .subscribe();
+            .subscribe((status) => {
+                // 4. Log the connection status
+                console.log("Subscription status:", status);
+
+                if (status === "SUBSCRIBED") {
+                    console.log("Ready to receive events!");
+                }
+            });
 
         return () => {
             supabase.removeChannel(channel);
