@@ -29,10 +29,10 @@ export default function BookmarkItem({ bookmark, onDelete }: BookmarkItemProps) 
   return (
     <div className="group relative bg-white dark:bg-surface-dark border border-transparent hover:border-slate-200 dark:hover:border-slate-700 rounded-lg p-4 transition-all hover:shadow-md hover:translate-x-1 flex items-center gap-4">
       <div
-        className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg ${colorClass}`}>
+        className={`shrink-0 w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg ${colorClass}`}>
         {firstLetter}
       </div>
-      <div className="flex-grow min-w-0">
+      <div className="grow min-w-0">
         <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100 group-hover:text-primary transition-colors truncate">
           <a
             href={bookmark.url}
@@ -47,7 +47,7 @@ export default function BookmarkItem({ bookmark, onDelete }: BookmarkItemProps) 
           {bookmark.url}
         </p>
       </div>
-      <div className="flex-shrink-0 z-10">
+      <div className="shrink-0 z-10">
         <button
           title="Delete bookmark"
           aria-label="Delete bookmark"
