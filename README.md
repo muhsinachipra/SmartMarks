@@ -2,6 +2,24 @@
 
 A minimalist, real-time bookmark manager built with **Next.js 14+**, **Supabase**, and **Tailwind CSS**.
 
+
+
+## 🚀 Challenges & Solutions
+
+### Realtime Updates Not Reflecting in UI
+**The Problem:** 
+After implementing Supabase Realtime subscriptions, the bookmark list would not update automatically when a new item was added. The data was being saved to the database, but the UI required a manual refresh to show the new entry.
+
+**Root Causes:**
+1. **Row Level Security (RLS):** I discovered that Supabase Realtime respects RLS policies. Although my user had permission to `INSERT` data, I hadn't explicitly defined a policy to `SELECT` (read) that specific data immediately. Consequently, Supabase silently blocked the realtime broadcast event for security reasons.
+2. **React Component Re-renders:** My Supabase client was initialized inside the component. This caused the WebSocket connection to disconnect and reconnect on every re-render, making the subscription unstable.
+
+**The Solution:**
+*   **Database:** Updated Supabase RLS policies to allow `SELECT` access for authenticated users on the `bookmarks` table.
+*   **Frontend:** Refactored the code to initialize the Supabase client *outside* the React component (singleton pattern) to ensure a stable connection.
+*   **Cleanup:** Implemented proper channel teardown in the `useEffect` cleanup function to prevent memory leaks and "zombie" connections.
+
+
 ## Features
 
 - **Google Authentication**: Secure sign-in using Google OAuth.
