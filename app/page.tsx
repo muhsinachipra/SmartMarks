@@ -1,3 +1,5 @@
+// app\page.tsx
+
 import Navbar from "@/components/Navbar";
 import BookmarkForm from "@/components/BookmarkForm";
 import BookmarkList from "@/components/BookmarkList";
