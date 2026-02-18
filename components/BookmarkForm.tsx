@@ -1,3 +1,5 @@
+// components\BookmarkForm.tsx
+
 "use client";
 
 import React, { useState } from "react";
@@ -20,11 +22,14 @@ export default function BookmarkForm() {
             return;
         }
 
-        const { error } = await supabase.from("bookmarks").insert({
-            title,
-            url,
-            user_id: user.id,
-        });
+        const { data, error } = await supabase
+            .from("bookmarks")
+            .insert({
+                title,
+                url,
+                user_id: user.id,
+            })
+            .select();
 
         if (error) {
             console.error("Error adding bookmark:", error);

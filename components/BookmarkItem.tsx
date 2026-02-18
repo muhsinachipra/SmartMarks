@@ -3,14 +3,14 @@
 import React from "react";
 
 interface Bookmark {
-  id: number;
+  id: string;
   title: string;
   url: string;
 }
 
 interface BookmarkItemProps {
   bookmark: Bookmark;
-  onDelete: (id: number) => void;
+  onDelete: (id: string) => void;
 }
 
 export default function BookmarkItem({ bookmark, onDelete }: BookmarkItemProps) {

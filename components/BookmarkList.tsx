@@ -5,7 +5,7 @@ import BookmarkItem from "./BookmarkItem";
 import { createClient } from "@/utils/supabase/client";
 
 interface Bookmark {
-    id: number;
+    id: string;
     title: string;
     url: string;
     user_id?: string;
@@ -56,7 +56,7 @@ export default function BookmarkList({ initialBookmarks }: { initialBookmarks: B
         };
     }, [supabase]);
 
-    const handleDelete = async (id: number) => {
+    const handleDelete = async (id: string) => {
         // Optimistic update
         setBookmarks((prev) => prev.filter((b) => b.id !== id));
 
