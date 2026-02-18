@@ -33,7 +33,8 @@ export default async function Home() {
                     </p>
                 </div>
                 <BookmarkForm />
-                <BookmarkList initialBookmarks={bookmarks || []} userId={user.id} />
+                {/* <BookmarkList initialBookmarks={bookmarks || []} userId={user.id} /> */}
+                <BookmarkList initialBookmarks={bookmarks || []} />
             </main>
             <footer className="w-full py-6 mt-auto border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark text-center">
                 <p className="text-sm text-slate-400 dark:text-slate-600">

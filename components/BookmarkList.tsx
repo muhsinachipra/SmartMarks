@@ -14,7 +14,8 @@ interface Bookmark {
     created_at?: string;
 }
 
-export default function BookmarkList({ initialBookmarks, userId }: { initialBookmarks: Bookmark[]; userId: string }) {
+// export default function BookmarkList({ initialBookmarks, userId }: { initialBookmarks: Bookmark[]; userId: string }) {
+export default function BookmarkList({ initialBookmarks }: { initialBookmarks: Bookmark[] }) {
     const [bookmarks, setBookmarks] = useState<Bookmark[]>(initialBookmarks);
     // Create the client once using useMemo so it doesn't recreate on every render
     const supabase = useMemo(() => createClient(), []);
@@ -24,7 +25,8 @@ export default function BookmarkList({ initialBookmarks, userId }: { initialBook
     }, [initialBookmarks]);
 
     useEffect(() => {
-        console.log("Setting up realtime subscription for user:", userId);
+        // console.log("Setting up realtime subscription for user:", userId);
+        console.log("Setting up realtime subscription");
 
         const channel = supabase
             .channel("realtime_bookmarks_list")
@@ -35,7 +37,7 @@ export default function BookmarkList({ initialBookmarks, userId }: { initialBook
                     schema: "public",
                     table: "bookmarks",
                     // We explicitly tell Supabase: "Only send me events where user_id equals MY ID"
-                    filter: `user_id=eq.${userId}`,
+                    // filter: `user_id=eq.${userId}`,
                 },
                 (payload) => {
                     console.log("Change received!", payload); // 3. Log the payload
@@ -54,7 +56,8 @@ export default function BookmarkList({ initialBookmarks, userId }: { initialBook
         return () => {
             supabase.removeChannel(channel);
         };
-    }, [supabase, userId]);
+    // }, [supabase, userId]);
+    }, [supabase]);
 
     const handleDelete = async (id: string) => {
         // Optimistic update
