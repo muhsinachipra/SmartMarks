@@ -2,7 +2,7 @@
 
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import BookmarkItem from "./BookmarkItem";
 import { createClient } from "@/utils/supabase/client";
 
@@ -14,26 +14,28 @@ interface Bookmark {
     created_at?: string;
 }
 
-export default function BookmarkList({ initialBookmarks }: { initialBookmarks: Bookmark[] }) {
+export default function BookmarkList({ initialBookmarks, userId }: { initialBookmarks: Bookmark[]; userId: string }) {
     const [bookmarks, setBookmarks] = useState<Bookmark[]>(initialBookmarks);
-    const supabase = createClient();
+    // Create the client once using useMemo so it doesn't recreate on every render
+    const supabase = useMemo(() => createClient(), []);
 
     useEffect(() => {
         setBookmarks(initialBookmarks);
     }, [initialBookmarks]);
 
     useEffect(() => {
-        // 1. Log to console to confirm we are starting
-        console.log("Setting up realtime subscription...");
+        console.log("Setting up realtime subscription for user:", userId);
 
         const channel = supabase
-            .channel("realtime_bookmarks_list") // 2. Use a unique name for clarity
+            .channel("realtime_bookmarks_list")
             .on(
                 "postgres_changes",
                 {
                     event: "*",
                     schema: "public",
                     table: "bookmarks",
+                    // We explicitly tell Supabase: "Only send me events where user_id equals MY ID"
+                    filter: `user_id=eq.${userId}`,
                 },
                 (payload) => {
                     console.log("Change received!", payload); // 3. Log the payload
@@ -47,16 +49,12 @@ export default function BookmarkList({ initialBookmarks }: { initialBookmarks: B
             .subscribe((status) => {
                 // 4. Log the connection status
                 console.log("Subscription status:", status);
-
-                if (status === "SUBSCRIBED") {
-                    console.log("Ready to receive events!");
-                }
             });
 
         return () => {
             supabase.removeChannel(channel);
         };
-    }, [supabase]);
+    }, [supabase, userId]);
 
     const handleDelete = async (id: string) => {
         // Optimistic update
